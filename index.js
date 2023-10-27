@@ -12,6 +12,8 @@ const myQueue = new Queue('myQueue', { connection: redisUrl, limiter: { max: 1, 
 
 const worker = new Worker('myQueue', async (job) => {
   console.log('Job executed at: ' + new Date().toISOString());
+  const apiResponse = await axios.get('https://catfact.ninja/fact');
+  job.data = apiResponse.data.fact;
   console.log('Cat Fact from API:', job.data); 
 });
 
@@ -23,7 +25,7 @@ app.post('/create-job', async (req, res) => {
 
     const catFact = apiResponse.data.fact;
 
-    const job = await myQueue.add('logCatFact', catFact, { repeat: { every: 1000 } });
+    const job = await myQueue.add('logCatFact', catFact, { repeat: { every: 1000 }} );
     jobID = job.id;
     res.status(200).json({ message: 'Cat Fact Job created successfully', ID: job.id });
 
@@ -39,7 +41,7 @@ app.post('/remove-job', async (req, res) => {
     try {
       const job = await Job.fromId(myQueue, jobId);
       if (job) {
-        await myQueue.obliterate();
+        await job.remove();
         res.status(200).json({ message: `Job with ID ${jobId} removed successfully` });
       } else {
         res.status(404).json({ error: 'Job not found' });
@@ -49,8 +51,7 @@ app.post('/remove-job', async (req, res) => {
       res.status(500).json({ error: 'Failed to remove the job' });
     }
   });
-  
-  
+      
 
 const port = 3000;
 app.listen(port, () => {
