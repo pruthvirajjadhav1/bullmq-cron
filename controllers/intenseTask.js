@@ -17,7 +17,8 @@ const addJob = async (job) => {
 			every: 5000,
 			limit: 5
 		},
-		jobId: 'isthisuniqueenough'
+		jobId: 'isthisuniqueenough',
+		removeOnComplete: true
 	});
 
 	console.log('Job ID', newJob.id);
