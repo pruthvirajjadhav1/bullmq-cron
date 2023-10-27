@@ -7,7 +7,13 @@ const app = express();
 const port = 3000;
 app.use(express.json());
 // Create a Bull queue
-const catFactQueue = new Bull('catFactQueue');
+const catFactQueue = new Bull('catFactQueue', {
+  redis: {
+    port: 6379, // Redis port
+    host: 'localhost', // Redis host
+  },
+});
+
 
 // Worker 
 catFactQueue.process(async job => {
@@ -40,6 +46,30 @@ app.post('/remove-job', async (req, res) => {
     res.status(500).send(`Error removing job: ${error.message}`);
   }
 });
+
+
+// Trying to do gui
+const arena = Arena(
+  {
+    queues: [
+      {
+        name: 'catFactQueue',
+        hostId: 'MyBullQueue',
+        type: {
+          Bull: Bull, // Provide the Bull constructor
+          name: 'Bull',
+        },
+      },
+    ],
+  },
+  {
+    // Optional: Arena configuration options
+  }
+);
+
+// Mount the Arena dashboard as middleware
+app.use('/arena', arena);
+
 
 
 app.listen(port, () => {
