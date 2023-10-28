@@ -9,7 +9,6 @@ import intenseRouter from './routes/intenseTask.js';
 import allTasksRouter from './routes/getAllTasks.js';
 import deleteTaskRouter from './routes/deleteTask.js';
 
-import './lib/worker.js';
 
 const app = express();
 
@@ -30,7 +29,7 @@ app.use('/', deleteTaskRouter);
 app.use(onNoMatch);
 app.use(onError);
 
-
+ 
 const start = async () => {
 
 	try {
