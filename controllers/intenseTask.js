@@ -14,8 +14,9 @@ const addJob = async (job) => {
 
 	const newJob = await pdfJobQueue.add(job.type, job, {
 		repeat: {
-			every: 5000,
-			limit: 5
+			pattern: '*/5 * * * * *',
+			limit: 5,
+			key: 'uniqueKeyForThisRepeatableJob',
 		},
 		jobId: 'isthisuniqueenough',
 		removeOnComplete: true
@@ -24,7 +25,6 @@ const addJob = async (job) => {
 	console.log('Job ID', newJob.id);
 
 	return newJob;
-
 }
 
 const intenseTask = async (req, res) => {
