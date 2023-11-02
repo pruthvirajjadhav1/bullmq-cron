@@ -15,7 +15,7 @@ const addJob = async (job) => {
 	const newJob = await pdfJobQueue.add(job.type, job, {
 		repeat: {
 			pattern: '*/5 * * * * *',
-			limit: 5,
+			limit: 10,
 			// key: 'uniqueKeyForThisRepeatableJob',
 		},
 		jobId: 'isthisuniqueenough',
