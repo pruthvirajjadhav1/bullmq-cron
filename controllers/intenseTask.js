@@ -16,7 +16,7 @@ const addJob = async (job) => {
 		repeat: {
 			pattern: '*/5 * * * * *',
 			limit: 5,
-			key: 'uniqueKeyForThisRepeatableJob',
+			// key: 'uniqueKeyForThisRepeatableJob',
 		},
 		jobId: 'isthisuniqueenough',
 		removeOnComplete: true
